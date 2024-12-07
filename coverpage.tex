@@ -1,0 +1,136 @@
+
+% Comandos de dados - titulo do documento
+\newcommand{\titulo}[1]{\title{#1}}
+\newcommand{\imprimirtitulo}{\thetitle}
+
+% Comandos de dados - autor (use \and para múltiplos autores)
+\newcommand{\autor}[1]{\author{#1}}
+\newcommand{\imprimirautor}{\theauthor}
+
+% Comandos de dados - data
+\let\olddate\date
+\renewcommand{\date}[1]{\AtBeginDocument{\olddate{#1}}}
+\newcommand{\data}[1]{\date{#1}}
+\newcommand{\imprimirdata}{
+  \center
+  \the\year
+}
+
+% Comandos de dados - instituição
+\providecommand{\imprimirinstituicao}{}
+\newcommand{\instituicao}[1]{\renewcommand{\imprimirinstituicao}{#1}}
+
+% Comandos de dados - local
+\providecommand{\imprimirlocal}{}
+\newcommand{\local}[1]{\renewcommand{\imprimirlocal}{#1}}
+
+% Comandos de dados - preambulo
+\providecommand{\imprimirpreambulo}{}
+\newcommand{\preambulo}[1]{\renewcommand{\imprimirpreambulo}{#1}}
+
+% Comandos de dados - orientador
+\providecommand{\imprimirorientadorRotulo}{}
+\providecommand{\imprimirorientador}{}
+\newcommand{\orientador}[2][\orientadorname]%
+  {\renewcommand{\imprimirorientadorRotulo}{#1}%
+   \renewcommand{\imprimirorientador}{#2}}
+
+% Comandos de dados - coorientador
+\providecommand{\imprimircoorientadorRotulo}{}
+\providecommand{\imprimircoorientador}{}
+\newcommand{\coorientador}[2][\coorientadorname]%
+  {\renewcommand{\imprimircoorientadorRotulo}{#1}%
+   \renewcommand{\imprimircoorientador}{#2}}
+
+% Comandos de dados - tipo de trabalho
+\providecommand{\imprimirtipotrabalho}{}
+\newcommand{\tipotrabalho}[1]{\renewcommand{\imprimirtipotrabalho}{#1}}
+
+
+\newcommand{\imprimircapa}{%
+  \begin{capa}%
+    \center
+    \imprimirinstituicao
+    \vfill
+    \large\imprimirautor
+
+    \vfill
+    \begin{center}
+      \MakeUppercase{\imprimirtitulo}
+    \end{center}
+    \vfill
+
+    \large\imprimirlocal
+
+    \large\imprimirdata
+
+    \vspace*{1cm}
+  \end{capa}
+}
+
+\newenvironment{capa}{\begin{titlingpage}}{\end{titlingpage}\cleardoublepage}
+
+% ---
+% Folha de rosto
+%   usar \imprimirfolhaderosto* caso deseje imprimir algo no verso da
+%   página no caso de estar no modo twoside. Util para imprimir a Ficha
+%   Bibliográfica. Porem, se estiver no modo oneside, a versao sem estrela é idêntica.
+\newenvironment{folhaderosto}[1][\folhaderostoname]{\clearpage}{\cleardoublepage}
+\newenvironment{folhaderosto*}[1][\folhaderostoname]{\clearpage}{\newpage}%
+
+% ---
+% Conteudo padrao da Folha de Rosto
+\makeatletter
+\newcommand{\folhaderostocontent}{
+  \begin{center}
+    \imprimirinstituicao\vspace*{\fill}
+
+    \large\imprimirautor
+
+    \vspace*{\fill}\vspace*{\fill}
+    \begin{center}
+      \MakeUppercase{\imprimirtitulo}
+    \end{center}
+    \vspace*{\fill}
+
+    \hspace{.45\textwidth}
+    \begin{minipage}{.5\textwidth}
+    	\singlespacing
+       \imprimirpreambulo
+     \end{minipage}
+     \vspace*{\fill}
+
+    \begin{flushright}
+        \large\imprimirorientadorRotulo
+        \imprimirorientador\par
+        \vspace*{\fill}  
+    \end{flushright}
+
+
+    \large\imprimirlocal
+    \par
+    \large\imprimirdata
+    \vspace*{1cm}
+
+  \end{center}
+}
+\makeatother
+
+\newcommand{\imprimirfolhaderostostar}[1]{%
+  \begin{folhaderosto*}{#1}
+     \folhaderostocontent
+  \end{folhaderosto*}}
+
+\newcommand{\imprimirfolhaderostonostar}[1]{%
+  \begin{folhaderosto}{#1}
+     \folhaderostocontent
+  \end{folhaderosto}}
+
+\makeatletter
+\newcommand{\imprimirfolhaderosto}[1][\folhaderostoname]{%
+   \@ifstar
+     \imprimirfolhaderostostar
+     \imprimirfolhaderostonostar
+}
+\makeatother
+
